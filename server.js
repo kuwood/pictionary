@@ -15,6 +15,10 @@ io.on('connection', (socket) => {
         socket.broadcast.emit('draw', position)
     })
 
+    socket.on('guess', (guess) => {
+        socket.broadcast.emit('guess', guess)
+    })
+
 })
 
 server.listen(8080)

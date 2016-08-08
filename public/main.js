@@ -1,7 +1,25 @@
 const socket = io()
 
 let pictionary = () => {
-    let canvas, context;
+    let canvas, context, guessBox
+
+    let onKeyDown = (event) => {
+        if (event.keyCode != 13) {
+            return;
+        }
+
+        console.log(guessBox.val())
+        let guess = guessBox.val()
+        socket.emit('guess', guess)
+        guessBox.val('')
+    }
+
+    guessBox = $('#guess input')
+    guessBox.on('keydown', onKeyDown)
+
+    let lastGuess = (guess) => {
+        $('#last-guess').text(guess)
+    }
 
     let draw = (position) => {
         context.beginPath();
@@ -33,9 +51,9 @@ let pictionary = () => {
         }
     });
     socket.on('draw', draw)
+    socket.on('guess', lastGuess)
 };
 
 $(document).ready(() => {
     pictionary();
-
 });
